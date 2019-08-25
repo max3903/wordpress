@@ -11,14 +11,12 @@ spec:
   selector:
     app: wordpress
     tier: frontend
-  type: NodePort
-  externalIPs:
-  - 68.183.250.40 
+  type: LoadBalancer
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: wp-pv-claim
+  name: wp
   labels:
     app: wordpress
 spec:
@@ -48,7 +46,7 @@ spec:
         name: wordpress
         env:
         - name: WORDPRESS_DB_HOST
-          value: wordpress-mysql
+          value: mysql
         - name: WORDPRESS_DB_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -63,4 +61,4 @@ spec:
       volumes:
       - name: wordpress-persistent-storage
         persistentVolumeClaim:
-          claimName: wp-pv-claim
+          claimName: wp
